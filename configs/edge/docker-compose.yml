@@ -1,0 +1,26 @@
+services:
+  traefik:
+    image: traefik:${TRAEFIK_VERSION:-v2.9}
+    container_name: edge-traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./dynamics:/etc/traefik/dynamics
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./acme.json:/etc/traefik/acme.json
+    networks:
+      edge:
+        ipv4_address: 10.0.0.2
+        aliases:
+          - traefik
+    
+
+
+networks:
+  edge:
+    external: true

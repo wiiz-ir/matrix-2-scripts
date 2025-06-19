@@ -1,0 +1,283 @@
+server_name: "chat.V_MAIN_DOMAIN"
+
+pid_file: /data/homeserver.pid
+
+web_client_location: https://web.chat.V_MAIN_DOMAIN/
+
+public_baseurl: https://chat.V_MAIN_DOMAIN/
+
+enable_registration_without_verification: false
+
+
+ip_range_blacklist:
+  - '127.0.0.0/8'
+  - '10.0.0.0/8'
+  - '172.16.0.0/12'
+  - '192.168.0.0/16'
+  - '100.64.0.0/10'
+  - '192.0.0.0/24'
+  - '169.254.0.0/16'
+  - '192.88.99.0/24'
+  - '198.18.0.0/15'
+  - '192.0.2.0/24'
+  - '198.51.100.0/24'
+  - '203.0.113.0/24'
+  - '224.0.0.0/4'
+  - '::1/128'
+  - 'fe80::/10'
+  - 'fc00::/7'
+  - '2001:db8::/32'
+  - 'ff00::/8'
+  - 'fec0::/10'
+
+listeners:
+
+  - port: 8448
+    type: http
+    tls: false
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+
+    resources:
+      - names: [client, federation]
+        compress: false
+
+
+  - port: 8009
+    type: metrics
+    bind_addresses: ['0.0.0.0']
+
+limit_remote_rooms:
+  #enabled: true
+  #complexity: 0.5
+  #complexity_error: "This room is too complex."
+  #admins_can_join: true
+
+retention:
+  enabled: true
+
+
+acme:
+    enabled: false
+    port: 80
+    bind_addresses: ['::', '0.0.0.0']
+    reprovision_threshold: 30
+    domain: matrix.example.com
+    account_key_file: /data/acme_account.key
+
+caches:
+   per_cache_factors:
+     #get_users_who_share_room_with_user: 2.0
+
+
+## Database ##
+
+database:
+  name: psycopg2
+  args:
+    user: V_SYNAPSE_POSTGRES_USER
+    password: V_POSTGRES_PASSWORD
+    database: V_SYNAPSE_POSTGRES_DB_NAME
+    host: 10.1.0.3   
+    cp_min: 5
+    cp_max: 10
+
+## Logging ##
+log_config: "/data/log.config"
+
+
+## Media Store ##
+media_store_path: "/data/media_store"
+
+url_preview_accept_language:
+#   - en
+
+
+turn_uris: 
+  - "turn:chat.V_MAIN_DOMAIN:3478?transport=udp"
+  - "turn:chat.V_MAIN_DOMAIN:3478?transport=tcp"
+  - "turns:chat.V_MAIN_DOMAIN:3478?transport=udp"
+  - "turns:chat.V_MAIN_DOMAIN:3478?transport=tcp"
+
+turn_shared_secret: "V_TURN_SHARED_SECRET"
+turn_user_lifetime: 86400000
+turn_allow_guests: True
+
+## Registration ##
+enable_registration: false
+account_validity:
+  #enabled: true
+  #period: 6w
+  #renew_at: 1w
+  #renew_email_subject: "Renew your %(app)s account"
+  #template_dir: "res/templates"
+  #account_renewed_html_path: "account_renewed.html"
+  #invalid_token_html_path: "invalid_token.html"
+
+registration_shared_secret: "V_REGISTERATION_SHARED_SECRET"
+
+allow_guest_access: false
+
+account_threepid_delegates:
+    #email: https://example.com     # Delegate email sending to example.com
+    #msisdn: http://localhost:8090  # Delegate SMS sending to this local process
+
+## Metrics ###
+enable_metrics: true
+
+metrics_flags:
+    #known_servers: true
+
+report_stats: true
+
+macaroon_secret_key: "V_SYNAPSE_MACAROON_SECRET"
+form_secret: "V_SYNAPSE_FORM_SECRET"
+
+signing_key_path: "/data/chat.V_MAIN_DOMAIN.signing.key"
+old_signing_keys:
+  #"ed25519:id": { key: "base64string", expired_ts: 123456789123 }
+
+
+
+trusted_key_servers:
+  - server_name: "matrix.org"
+
+
+## Single sign-on integration ##
+saml2_config:
+  sp_config:
+    #metadata:
+    #  local: ["saml2/idp.xml"]
+    #  remote:
+    #    - url: https://our_idp/metadata.xml
+
+
+  user_mapping_provider:
+    config:
+      #mxid_source_attribute: displayName
+      #mxid_mapping: dotreplace
+
+oidc_providers:
+ 
+  #- idp_id: github
+  #  idp_name: Github
+  #  idp_brand: org.matrix.github
+  #  discover: false
+  #  issuer: "https://github.com/"
+  #  client_id: "your-client-id" # TO BE FILLED
+  #  client_secret: "your-client-secret" # TO BE FILLED
+  #  authorization_endpoint: "https://github.com/login/oauth/authorize"
+  #  token_endpoint: "https://github.com/login/oauth/access_token"
+  #  userinfo_endpoint: "https://api.github.com/user"
+  #  scopes: ["read:user"]
+  #  user_mapping_provider:
+  #    config:
+  #      subject_claim: "id"
+  #      localpart_template: "{{ user.login }}"
+  #      display_name_template: "{{ user.name }}"
+
+
+cas_config:
+  #enabled: true
+
+
+
+sso:
+    #client_whitelist:
+
+
+
+password_config:
+   #pepper: "EVEN_MORE_SECRET"
+   policy:
+      #enabled: true
+   
+ui_auth:
+    #session_timeout: "15s"
+
+
+email:
+  #smtp_host: mail.server
+ 
+
+password_providers:
+#    - module: "ldap_auth_provider.LdapAuthProvider"
+#      config:
+#        enabled: true
+#        uri: "ldap://ldap.example.com:389"
+#        start_tls: true
+#        base: "ou=users,dc=example,dc=com"
+#        attributes:
+#           uid: "cn"
+#           mail: "email"
+#           name: "givenName"
+#        #bind_dn:
+#        #bind_password:
+#        #filter: "(objectClass=posixAccount)"
+
+
+
+## Push ##
+push:
+  #include_content: false
+  #group_unread_count_by_room: false
+
+
+spam_checker:
+   #- module: "my_custom_project.SuperSpamChecker"
+   #  config:
+   #    example_option: 'things'
+
+
+## Opentracing ##
+opentracing:
+    #enabled: true
+    #homeserver_whitelist:
+    #  - ".*"
+
+    #jaeger_config:
+    #  sampler:
+    #    type: const
+    #    param: 1
+
+    #  logging:
+    #    false
+
+
+redis:
+  enabled: true
+
+  host: 10.1.0.2
+  port: 6379
+  #password: <secret_password>
+
+
+experimental_features:
+  msc3861:
+    enabled: true
+
+    # Synapse will call `{issuer}/.well-known/openid-configuration` to get the OIDC configuration
+    issuer: https://chat.V_MAIN_DOMAIN/
+
+    # Matches the `client_id` in the auth service config
+    client_id: V_MAS_CLIENT_ID
+    # Matches the `client_auth_method` in the auth service config
+    client_auth_method: client_secret_basic
+    # Matches the `client_secret` in the auth service config
+    client_secret: "V_MAS_CLIENT_SECRET"
+
+    # Matches the `matrix.secret` in the auth service config
+    admin_token: "V_MAS_MATRIX_SECRET"
+
+    # URL to advertise to clients where users can self-manage their account
+    account_management_url: "https://auth.chat.V_MAIN_DOMAIN/account"
+
+
+
+# vim:ft=yaml

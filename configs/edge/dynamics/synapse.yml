@@ -1,0 +1,124 @@
+http:
+  routers:
+    synapse:
+      rule: "Host(`s.chat.V_MAIN_DOMAIN`)"
+      service: "synapse"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+
+    mail-frontend:
+      rule: "Host(`mail.chat.V_MAIN_DOMAIN`)"
+      service: "mail"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+
+    synapse-fed:
+      rule: "Host(`fed.s.chat.V_MAIN_DOMAIN`)"
+      service: "synapse-fed"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+
+    synapse-metrics:
+      rule: "Host(`chat.V_MAIN_DOMAIN`) && PathPrefix(`/_synapse/metrics`)"
+      service: "synapse-metrics"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+      middlewares:
+        - "synapse-metrics-auth"
+
+    matrix-https:
+      rule: "Host(`chat.V_MAIN_DOMAIN`) && ( PathPrefix(`/_matrix`) || PathPrefix(`/.well-known/matrix`))"
+      service: "matrix-https"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+      priority: 100
+
+    chat-https:
+      rule: "Host(`web.chat.V_MAIN_DOMAIN`)"
+      service: "chat-https"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+
+    sliding-sync:
+      rule: "Host(`sync.chat.V_MAIN_DOMAIN`) && (PathPrefix(`/client/`) || PathPrefix(`/_matrix/client/unstable/org.matrix.msc3575/sync`))"
+      service: "sync-https"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+      priority: 200
+
+    mas-auth:
+      rule: "Host(`chat.V_MAIN_DOMAIN`) && (PathPrefix(`/_matrix/client/v3/login`) || PathPrefix(`/_matrix/client/r0/login`) || PathPrefix(`/_matrix/client/v3/logout`) || PathPrefix(`/_matrix/client/r0/logout`) || PathPrefix(`/_matrix/client/v3/refresh`) || PathPrefix(`/_matrix/client/r0/refresh`) || PathPrefix(`/.well-known/openid-configuration`))"
+      service: "mas"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+      priority: 300  # Higher priority than matrix-https
+
+    mas-frontend:
+      rule: "Host(`auth.chat.V_MAIN_DOMAIN`)"
+      service: "mas"
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: "le"
+
+  services:
+    synapse:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.3:8008"
+
+    synapse-fed:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.3:8448"
+
+    synapse-metrics:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.3:8009"
+
+    matrix-https:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.4:80"
+
+    chat-https:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.5:80"
+
+    sync-https:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.6:8008"
+
+    mas:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.7:8080"
+    mail:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.8:8025"
+
+  middlewares:
+    synapse-metrics-auth:
+      basicAuth:
+        users:
+          - "V_SYNAPSE_METRIC_AUTH"

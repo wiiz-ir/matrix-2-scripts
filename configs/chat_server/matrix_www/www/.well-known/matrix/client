@@ -1,0 +1,13 @@
+{
+  "m.homeserver": {
+    "base_url": "https://chat.V_MAIN_DOMAIN:443/"
+  },
+  "org.matrix.msc3575.proxy": {
+    "url": "https://sync.chat.V_MAIN_DOMAIN"
+  },
+
+  "org.matrix.msc2965.authentication": {
+    "issuer": "https://chat.V_MAIN_DOMAIN/",
+    "account": "https://auth.chat.V_MAIN_DOMAIN/account"
+  }
+}

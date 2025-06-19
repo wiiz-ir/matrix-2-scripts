@@ -1,0 +1,7 @@
+.env
+!chat_server/.env
+dist/
+
+env.yml
+
+.venv

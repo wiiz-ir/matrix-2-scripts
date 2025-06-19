@@ -1,0 +1,17 @@
+http:
+  routers:
+    admin:
+      entryPoints:
+        - websecure
+      rule: "Host(`to.chat.V_MAIN_DOMAIN`)"
+      service: api@internal
+      middlewares:
+        - adminAuth
+      tls:
+        certResolver: le
+        
+  middlewares:
+    adminAuth:
+      basicAuth:
+        users:
+          - "V_ADMIN_USER_PASSWORD_HASH"

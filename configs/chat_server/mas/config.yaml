@@ -1,0 +1,162 @@
+account:
+  email_change_allowed: true
+  password_change_allowed: true
+  password_registration_enabled: true
+clients:
+- client_auth_method: client_secret_basic
+  client_id: V_MAS_CLIENT_ID
+  client_secret: V_MAS_CLIENT_SECRET
+database:
+  connect_timeout: 30
+  database: V_MAS_DATABASE_NAME
+  host: 10.1.0.3
+  idle_timeout: 600
+  max_connections: 10
+  max_lifetime: 1800
+  min_connections: 0
+  password: V_MAS_DATABASE_PASSWORD
+  port: 5432
+  username: V_MAS_DATABASE_USERNAME
+email:
+  from: '"Authentication Service" <root@localhost>'
+  hostname: mail
+  mode: plain
+  port: 1025
+  reply_to: '"Authentication Service" <root@localhost>'
+  transport: smtp
+http:
+  issuer: https://chat.V_MAIN_DOMAIN/
+  listeners:
+  - binds:
+    - address: '[::]:8080'
+    name: web
+    proxy_protocol: false
+    resources:
+    - name: discovery
+    - name: human
+    - name: oauth
+    - name: compat
+    - name: graphql
+    - name: assets
+  - binds:
+    - host: localhost
+      port: 8081
+    name: internal
+    proxy_protocol: false
+    resources:
+    - name: health
+  public_base: https://auth.chat.V_MAIN_DOMAIN/
+  trusted_proxies:
+  - 192.168.0.0/16
+  - 172.16.0.0/12
+  - 10.0.0.0/10
+  - 127.0.0.1/8
+  - fd00::/8
+  - ::1/128
+matrix:
+  endpoint: https://s.chat.V_MAIN_DOMAIN/
+  homeserver: chat.V_MAIN_DOMAIN
+  secret: V_MAS_MATRIX_SECRET
+passwords:
+  enabled: true
+  minimum_complexity: 3
+  schemes:
+  - algorithm: argon2id
+    version: 1
+secrets:
+  encryption: a0a812e5538d3296cf164eafc9ab0d84d542c393ccf8e6f2c3c55a42f8b81af6
+  keys:
+  - key: '-----BEGIN RSA PRIVATE KEY-----
+
+      MIIEpAIBAAKCAQEAz1KDChJVMZ94uKv2HMkLRqLA7gBw7LtdTMW0+aYD81aXS0W/
+
+      JpbSNDz+Ota2k36Z2pKn188o2WPe136/2Cllqbar1BJuRi9G0OKa61zJq30w44OG
+
+      l1Afonfl9jxGZciDYxhA3RY+9jbag77uQZTL3st1eHE8oKnkL78cBz+LjEIptUdJ
+
+      4QKTSIZxjmJQuYseN3nNH+3ReRI6ftIyvIh7nvzzIgW6j25DtAYW0hf5PKDCPfuB
+
+      rRbeL1n2pXWorLdHHqEZiCw63FTn6WZgffD0jxG0kaX7YR43a5Rt2v6qZ90z6kW7
+
+      Arl55ELR8pbUsxA8pfqjLH1bYgYVVaZlHyC22QIDAQABAoIBAC60e+jM8HxZXKzd
+
+      sHgTooKrL6NuXgI2w3IEKB0FlWZAX50JfWKIH5q9EtjWfhMENkzTNRSdCqrOoOkT
+
+      GMztpoVxLYx9CnKtO9ra8eOL57LGZTkb7DoyRq4nLJsoQQO1BERStmoYFN8KxHdh
+
+      j/MePj9WvoP/npTjMRDAkOPhIOLbrLUzNtKU4FvHB80e0/y3hN9g8vgZCMZeOK/T
+
+      zSNd28R3gSNMpGff+TQupJBKRUT8eghvvcXP6HKE6ExjKzrxOkt17O4lImVPWdst
+
+      8OdKjWO2pTkTa02EH/it2AEOlZ25BMVQELcJM4YyRrwBGBzmC1diCUkNhWBlQV8R
+
+      X5UsGTECgYEA+sgK/wuzb+bZ81o6dV6V/uHidx/woWbUMVzPro3GsUInKGXvqVeK
+
+      cNabuI4ACpYrqULKyXIkRiE5le/DwkqErbS6HqwX1IadwtAxfjGy6Ao1/e7j/1hr
+
+      HsZX+Odcj4fiaQAen8e8Vb1sqX30EG0Ba9T/VqZ5lP3Fu18Xg6wcebMCgYEA06L0
+
+      XicoG6vluHY1SweHTSExwVkLZBmclj2bFkPKMqL39SIUr2oq91guf9qNDPj2iVM+
+
+      e8rnzed4e5kg8tTWm/fOARnFvQ8l7Ickcdjo3ZgAHC45sI5uebuJta6CA+mBX4IZ
+
+      9mq+QjGxzGDNa3YEIWKtvsWROROK4WnaS8zXL0MCgYEAsu8S8YG+yUQ1FK63cVFI
+
+      wvEXLhorDm6ZTpNDV++u6oEiAXAiPXjJvdNSjq87FlKp2n5exLddbHB+bx4BVlrn
+
+      Ki3+cq4l3q0iWYNFHR6G4YuPlJzkLyg+Xln1IRKrd3nkMTk1oJnaJm8e3hyRjTrJ
+
+      vc/fVEs6CvW7JQMnevrN4oMCgYEAlxZ3xJvJu2+N0ZG6XDUkt8Ch57mtMypBqtSS
+
+      WmPM/zdvM7a/87cks25ly+r31bILN2CRdAkYUdwVHI/mgNXH3JMdo5WFoIIm/eRA
+
+      9XH4VPKF6ZhqoQwd/JQRLP5HXYmfTdLwvAXajCE0IIdfP3+CVV9AULh1A71a4bAT
+
+      Ixg660cCgYA7DvcQ2aefEJritr0AMxYxzfcVK79yXHS6fkd6Q9LuhKnyyKqmC8w0
+
+      jk+/QSl5du5wi4KloIwnSrQj4sNw4GD2VQdyEnpmn04P695V0ZRXzcXol5QfQPZg
+
+      idBIyMcz3iK6Vks08FV4xZGHeGrA2lNZ+qz4UqPV+6GFZXn0WFV7Gw==
+
+      -----END RSA PRIVATE KEY-----
+
+      '
+    kid: mYp2tFtTUe
+  - key: '-----BEGIN EC PRIVATE KEY-----
+
+      MHcCAQEEICNRpRXYwGObTwdbYmZI2Ca5VRpucPs9dWuw2u2YsalvoAoGCCqGSM49
+
+      AwEHoUQDQgAE/XbO+1yat3uo8yiaMWPQczVxO+ULt8VzKv88hBwxaXifOqpMbgvK
+
+      MMA7JHyHgrtPNsDAmixr/AIsighQIeRDkg==
+
+      -----END EC PRIVATE KEY-----
+
+      '
+    kid: zKA7E6Z9O5
+  - key: '-----BEGIN EC PRIVATE KEY-----
+
+      MIGkAgEBBDAXLD32UWxabzySDfZWI7QIaZYS8uknmbwaRNNSP82jGv6TJznHWWvB
+
+      So6CUDuoZRmgBwYFK4EEACKhZANiAAQwEL5FXlYo6zd74wWIIDacSy1v1gEU28Uz
+
+      bkqVheGHo9lU9n2geCQyeVOV4RqZtGomZ8khsW81kVFueMz3WguQDG0BkGZB1Oa7
+
+      Ff4jiH1ynl8cSb4kpn2vP0m9r8wdgog=
+
+      -----END EC PRIVATE KEY-----
+
+      '
+    kid: 0s9PIbp1hI
+  - key: '-----BEGIN EC PRIVATE KEY-----
+
+      MHQCAQEEIFlxZAatkFYsVVVkrGoL+f8oID+3V0M8P2zs02XOOfhioAcGBSuBBAAK
+
+      oUQDQgAENYgZYhu6IKnCisuDerLEYGx1/QV2SeNaBbtBVz2zSQVaDOjv8cDNLTXA
+
+      GaS2W1hrM3B+qyrx+J33bhv4xysLWw==
+
+      -----END EC PRIVATE KEY-----
+
+      '
+    kid: BpQYB8jnYq

@@ -1,0 +1,68 @@
+{
+    "default_server_config": {
+        "m.homeserver": {
+            "base_url": "https://chat.V_MAIN_DOMAIN",
+            "server_name": "V_MAIN_DOMAIN"
+        },
+        "m.identity_server": {
+            "base_url": "https://vector.im"
+        },
+        "org.matrix.msc3575.proxy": {
+            "url": "https://sync.chat.V_MAIN_DOMAIN"
+        },
+        "org.matrix.msc2965.authentication": {
+            "issuer": "https://chat.V_MAIN_DOMAIN/",
+            "account": "https://auth.chat.V_MAIN_DOMAIN/account"
+        }
+    },
+    "disable_custom_urls": false,
+    "disable_guests": false,
+    "disable_login_language_selector": false,
+    "disable_3pid_login": false,
+    "brand": "V_MAIN_BRAND_NAME",
+    "integrations_ui_url": "https://scalar.vector.im/",
+    "integrations_rest_url": "https://scalar.vector.im/api",
+    "integrations_widgets_urls": [
+        "https://scalar.vector.im/_matrix/integrations/v1",
+        "https://scalar.vector.im/api",
+        "https://scalar-staging.vector.im/_matrix/integrations/v1",
+        "https://scalar-staging.vector.im/api",
+        "https://scalar-staging.riot.im/scalar/api"
+    ],
+    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
+    "defaultCountryCode": "IR",
+    "showLabsSettings": false,
+    "features": {
+        "feature_new_spinner": false
+    },
+    "default_federate": true,
+    "default_theme": "light",
+    "roomDirectory": {
+        "servers": [
+            "matrix.org"
+        ]
+    },
+    "piwik": {
+        "url": "https://piwik.riot.im/",
+        "whitelistedHSUrls": [
+            "https://matrix.org"
+        ],
+        "whitelistedISUrls": [
+            "https://vector.im",
+            "https://matrix.org"
+        ],
+        "siteId": 1
+    },
+    "enable_presence_by_hs_url": {
+        "https://matrix.org": true,
+        "https://chat.V_MAIN_DOMAIN": true,
+        "https://matrix-client.matrix.org": false
+    },
+    "settingDefaults": {
+        "breadcrumbs": true
+    },
+    "element_call": {
+        "url": "https://s.chat.V_MAIN_DOMAIN",
+        "use_exclusively": true
+    }
+}

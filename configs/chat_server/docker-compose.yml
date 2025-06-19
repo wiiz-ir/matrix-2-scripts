@@ -1,0 +1,162 @@
+services:
+
+  redis:
+    image: "redis:${REDIS_VERSION}"
+    container_name: "chat_redis"
+    restart: "unless-stopped"
+    labels:
+      - "traefik.enable=false"
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.2
+
+    
+  postgres:
+    image: "postgres:${POSTGRES_VERSION}"
+    container_name: "chat_postgres"
+    restart: "unless-stopped"
+    env_file:
+      - "postgres.env"
+    volumes:
+      - "./data/postgres/data:/var/lib/postgresql/data"
+    labels:
+      - "traefik.enable=false"
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.3
+
+
+  synapse:
+    image: "matrixdotorg/synapse:${SYNAPSE_VERSION}"
+    container_name: "chat_synapse"
+    restart: "unless-stopped"
+    env_file:
+      - "synapse.env"
+    expose:
+      - 8008
+      - 8448
+      - 8009
+    volumes:
+      - "./matrix_synapse:/data"
+      - "./data/synapse/logs:/synapse_logs"
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.4
+      edge:
+        ipv4_address: 10.0.0.3
+
+
+  matrix:
+    image: "nginx:latest"
+    container_name: "chat_matrix"
+    restart: "unless-stopped"
+    volumes:
+      - "./matrix_www/nginx.conf:/etc/nginx/conf.d/default.conf"
+      - "./matrix_www/www:/var/www/"
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - synapse
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.5
+      edge:
+        ipv4_address: 10.0.0.4
+
+
+  web:
+    image: "nginx:latest"
+    container_name: "chat_element"
+    volumes:
+      - "./element/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "./element/www:/usr/share/nginx/html:ro"
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=false"
+    networks:
+      edge:
+        ipv4_address: 10.0.0.5
+
+
+  coturn:
+    image: "coturn/coturn:${COTURN_VERSION}"
+    container_name: "chat_coturn"
+    restart: "unless-stopped"
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - "./coturn/turnserver.conf:/etc/coturn/turnserver.conf"
+    ports:
+      - "49160-49200:49160-49200/udp"
+      - "3478:3478"
+      - "5349:5349"
+
+
+  sliding-sync:
+    image: "ghcr.io/matrix-org/sliding-sync:${SYNC_VERSION}"
+    container_name: "chat_sliding_sync"
+    restart: "unless-stopped"
+    env_file:
+      - "sync.env"
+    expose:
+      - "8008"
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - synapse
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.6
+      edge:
+        ipv4_address: 10.0.0.6
+
+
+  mas:
+    image: "ghcr.io/element-hq/matrix-authentication-service:${MAS_VERSION}"
+    container_name: "chat_mas"
+    restart: "unless-stopped"
+    env_file:
+      - "mas.env"
+    expose:
+      - "8080"
+      - "8081"
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - "./mas:/data"
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.7
+      edge:
+        ipv4_address: 10.0.0.7
+
+  mail:
+    container_name: chat_test_mail
+    image: mailhog/mailhog
+    expose:
+      - 8025
+      - 1025
+    ports:
+      - 8025:8025
+    networks:
+      chat-local:
+        ipv4_address: 10.1.0.8
+      edge:
+        ipv4_address: 10.0.0.8
+networks:
+  chat-local:
+    driver: "bridge"
+    ipam:
+      driver: "default"
+      config:
+        - subnet: "10.1.0.0/24"
+  edge:
+    external: true
