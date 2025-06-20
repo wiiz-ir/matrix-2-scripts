@@ -68,4 +68,4 @@ def get_element(input_path: str) -> None:
 
 if __name__ == "__main__":
     # Example usage
-    get_element("chat_server/element/www")
+    get_element("configs/chat_server/element/www")

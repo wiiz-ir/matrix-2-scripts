@@ -5,3 +5,5 @@ dist/
 env.yml
 
 .venv
+configs/chat_server/element/www/*
+# 

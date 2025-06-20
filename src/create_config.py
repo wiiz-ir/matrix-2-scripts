@@ -61,6 +61,8 @@ def _generate_value(generator_type: str) -> str:
         return secrets.token_hex(64)
     elif generator_type == "RAND_HEX_32":
         return secrets.token_hex(32)
+    elif generator_type == "RAND_HEX_26":
+        return secrets.token_hex(26)
     elif generator_type == "RAND_HEX_16":
         return secrets.token_hex(16)
     elif generator_type == "RAND_HEX_10":
