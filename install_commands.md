@@ -36,7 +36,8 @@ GRANT ALL ON SCHEMA public TO V_SYNC_USERNAME;
 
 
 touch ./data/synapse/logs/homeserver.log
-chmod 755 homeserver.log
+
+chmod 755 ./data/synapse/logs/homeserver.log
 
 docker compose up -d
 
