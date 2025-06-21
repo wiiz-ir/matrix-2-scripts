@@ -7,3 +7,4 @@ env.yml
 .venv
 configs/chat_server/element/www/*
 !configs/chat_server/.env
+!configs/edge/.env
